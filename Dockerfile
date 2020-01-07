@@ -3,7 +3,7 @@ FROM oracle/graalvm-ce:19.3.0-java8 as graalvm
 COPY . /home/app/elastic-client
 WORKDIR /home/app/elastic-client
 RUN gu install native-image
-RUN native-image --initialize-at-build-time=org.apache.http.util.Args,org.apache.http.HttpHost,org.apache.http.util.TextUtils --no-server --static -H:ReflectionConfigurationFiles=build/classes/java/main/META-INF/native-image/elastic/client/reflection-config.json \
+RUN native-image --initialize-at-build-time=org.apache.http.util.Args,org.apache.http.HttpHost,org.apache.http.util.TextUtils --initialize-at-run-time=org.elasticsearch.client.RestClient --no-server --static -H:ReflectionConfigurationFiles=build/classes/java/main/META-INF/native-image/elastic/client/reflection-config.json \
      -cp build/libs/elastic-client-*-all.jar
 
 
