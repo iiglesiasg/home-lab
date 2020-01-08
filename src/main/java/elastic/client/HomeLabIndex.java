@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Introspected
 public class HomeLabIndex {
+    private String device;
     private String    signalType;
     private String    magnitude;           // (key word)
     private Date      creationTime;

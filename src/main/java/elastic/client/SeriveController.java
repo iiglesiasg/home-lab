@@ -29,7 +29,7 @@ public class SeriveController {
                                 .map(SearchHit::getSourceAsMap));
     }*/
 
-    @CaptureTransaction("elastic#insert")
+    @CaptureTransaction("SeriveController#greet")
     @Consumes(MediaType.APPLICATION_JSON)
     @Post("/insert")
     public CompletableFuture<MutableHttpMessage> greet(@Body CompletableFuture<HomeLabIndex> request) {

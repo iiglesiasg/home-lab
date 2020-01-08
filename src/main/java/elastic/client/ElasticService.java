@@ -1,5 +1,6 @@
 package elastic.client;
 
+import co.elastic.apm.api.CaptureSpan;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.MutableHttpMessage;
@@ -140,6 +141,7 @@ public class ElasticService {
         return sourceBuilder;
     }
 
+    @CaptureSpan("elasticService#insert")
     public void insertHomeLab(HomeLabIndex operation) {
         BulkRequest request = new BulkRequest();
         //operation.setCreationTime(Date.valueOf(LocalDate.now()));

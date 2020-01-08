@@ -1,0 +1,90 @@
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: special-config
+# data:
+#   application.yml: very
+#---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "elastic-client"
+spec:
+  selector:
+    matchLabels:
+      app: "elastic-client"
+  template:
+    metadata:
+      labels:
+        app: "elastic-client"
+    spec:
+      nodeSelector:
+        type: 'compute'
+      containers:
+        - name: "elastic-client"
+          image: "iiglesias/home-lab:elastic-client-0.1"
+          env:
+            - name: JAVA_OPTS
+              value: '-Xshareclasses -Xquickstart -XX:+UseContainerSupport -XX:+RuntimeInstrumentation'
+           # - name: SPRING_PROFILES_ACTIVE
+           #   value: 'dev'
+            - name: LOGSTASH_SOCKET
+              value: 'logstash-helm:9800'
+            - name: SERVER_PORT
+              value: '8080'
+           # - name: ENCRYPT_KEY
+              value: '294979e512cb8e79370dabecadc3fcbb849e78d2d6bd2049'
+            - name: ELASTIC_APM_SERVER_URLS
+              value: 'https://apm-server-apm-http:8200'
+            - name: ELASTIC_APM_VERIFY_SERVER_CERT
+              value: 'false'
+            - name: ELASTIC_APM_SECRET_TOKEN
+              value: 'z9lp5srpkxs2jn5gknzvr8ml'
+            - name: ELASTIC_APM_SERVICE_NAME
+              value: 'elastic-client'
+            - name: ELASTIC_APM_SERVICE_VERSION
+              value: '1.12.0'
+            - name: ELASTIC_APM_APPLICATION_PACKAGES
+              value: 'elastic.client'
+            - name: RABBIT_USER
+              value: 'lab'
+            - name: RABBIT_PASSWORD
+              value: '2Kebitu%'
+            - name: RABBIT_HOST
+              value: 'amqp://rabbit-rabbitmq-headless:5672'
+            #- name: SPRING_JPA_DATABASEPLATFORM
+            #  value: 'org.hibernate.dialect.PostgreSQL95Dialect'
+            #- name: SPRING_MAIN_LAZYINITIALIZATION
+            #  value: 'true'
+            #- name: SPRING_CLOUD_KUBERNETES_CONFIG_NAMESPACE
+            #  value: 'default'
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+          #livenessProbe:
+          #  httpGet:
+          #    path: /banking/online-collect/v1/health
+          #    port: 8080
+          #  initialDelaySeconds: 10
+          #  timeoutSeconds: 3
+          #  failureThreshold: 15
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elastic-client
+spec:
+  type: ClusterIP
+  ports:
+    - name: elastic-client
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: elastic-client

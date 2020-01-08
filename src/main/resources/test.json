@@ -1,4 +1,5 @@
 {
+  "device": "piCPUTemp",
   "signalType":"Temp",
   "magnitude": "Cº",
 

@@ -2,11 +2,12 @@ plugins {
     id "com.github.johnrengelman.shadow" version "5.0.0"
     id "application"
     id "net.ltgt.apt-eclipse" version "0.21"
+    id 'com.google.cloud.tools.jib' version '1.8.0'
 }
 
 
 
-version "0.1"
+version "0.2"
 group "elastic.client"
 
 repositories {
@@ -25,14 +26,16 @@ dependencies {
     //compileOnly 'io.projectreactor:reactor-bom:Dysprosium-SR2'
     compileOnly 'co.elastic.apm:apm-agent-api:1.12.0'
     compileOnly 'org.apache.commons:commons-lang3:3.9'
-    compileOnly 'commons-logging:commons-logging:1.2'
-    compileOnly "com.oracle.substratevm:svm"
+    //compileOnly 'commons-logging:commons-logging:1.2'
+    //compileOnly "com.oracle.substratevm:svm"
+    compileOnly 'io.micronaut:micronaut-management'
     annotationProcessor 'org.projectlombok:lombok:1.18.10'
     annotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
     annotationProcessor "io.micronaut:micronaut-inject-java"
     annotationProcessor "io.micronaut:micronaut-validation"
-    annotationProcessor "io.micronaut:micronaut-graal"
     implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    implementation 'co.elastic.apm:elastic-apm-agent:1.12.0'
+    implementation "io.micronaut.configuration:micronaut-rabbitmq"
     implementation "io.micronaut:micronaut-http-client"
     implementation "io.micronaut:micronaut-inject"
     implementation "io.micronaut:micronaut-validation"
@@ -59,6 +62,14 @@ test {
 shadowJar {
     mergeServiceFiles()
 }
+
+jib.from.image='adoptopenjdk/openjdk8-openj9:alpine-slim'
+jib.to.image = 'iiglesias/home-lab'
+jib.to.tags = ['elastic-client-0.2']
+
+jib.container.jvmFlags = ['-Xshareclasses','-Xquickstart','-XX:+UseContainerSupport','-XX:+RuntimeInstrumentation','-javaagent:elastic-apm-agent-1.12.0.jar','-Delastic.apm.service_name=elastic-client',
+                          '-Delastic.apm.server_url=https://apm-server-apm-http:8200','-Delastic.apm.verify_server_cert=false',
+                          '-Delastic.apm.secret_token=z9lp5srpkxs2jn5gknzvr8ml','-Delastic.apm.application_packages=elastic.client']
 
 run.classpath += configurations.developmentOnly
 run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')

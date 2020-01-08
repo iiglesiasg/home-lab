@@ -16,3 +16,10 @@ elasticsearch:
   connectionRequestTimeout: 5000
   socketTimeout: 5000
   maxRetryTimeout: 5000
+
+rabbitmq:
+  uri: ${RABBIT_HOST}
+  # For some reason it is also necessary to define the port when running in Gitlab CI
+  port: 5672
+  username: ${RABBIT_USER}
+  password: ${RABBIT_PASSWORD}
