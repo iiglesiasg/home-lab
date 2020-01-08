@@ -33,7 +33,7 @@ spec:
             - name: SERVER_PORT
               value: '8080'
            # - name: ENCRYPT_KEY
-              value: '294979e512cb8e79370dabecadc3fcbb849e78d2d6bd2049'
+            #  value: '294979e512cb8e79370dabecadc3fcbb849e78d2d6bd2049'
             - name: ELASTIC_APM_SERVER_URLS
               value: 'https://apm-server-apm-http:8200'
             - name: ELASTIC_APM_VERIFY_SERVER_CERT
