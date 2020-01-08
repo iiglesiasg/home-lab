@@ -1,0 +1,15 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: measure-dapr
+spec:
+  type: bindings.rabbitmq
+  metadata:
+  - name: queueName
+    value: measure
+  - name: host
+    value: amqp://guest:guest@10.43.208.32:5672
+  - name: durable
+    value: false
+  - name: deleteWhenUnused
+    value: false
