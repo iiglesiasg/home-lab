@@ -8,7 +8,7 @@ spec:
   - name: queueName
     value: measure
   - name: host
-    value: amqp://guest:guest@10.43.208.32:5672
+    value: "amqp://guest:guest@10.43.208.32:5672"
   - name: durable
     value: false
   - name: deleteWhenUnused
