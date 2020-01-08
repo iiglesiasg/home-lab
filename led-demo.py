@@ -6,12 +6,13 @@ import os
 red = LED(26)
 
 dapr_url = os.getenv("DAPR_HTTP_PORT", 'http://10.43.29.189:80/v1.0/bindings/measure-dapr')
+cpu = CPUTemperature(min_temp=50, max_temp=90)
 
 while True:
     payload = {"device": "pi",
                "signalType": "Temp",
                "magnitude": "Cº",
-               "value": CPUTemperature.value}
+               "value": cpu.temperature}
     try:
         response = requests.post(dapr_url, json=payload)
         print(response.text, flush=True)
