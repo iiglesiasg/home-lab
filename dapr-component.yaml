@@ -6,10 +6,10 @@ spec:
   type: bindings.rabbitmq
   metadata:
   - name: queueName
-    value: measure
+    value: "measure"
   - name: host
     value: "amqp://guest:guest@10.43.208.32:5672"
   - name: durable
-    value: false
+    value: "false"
   - name: deleteWhenUnused
-    value: false
+    value: "false"
