@@ -1,5 +1,0 @@
-profile: service
-defaultPackage: elastic.client
----
-testFramework: junit
-sourceLanguage: java
