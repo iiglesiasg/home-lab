@@ -8,28 +8,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "elastic-client"
+  name: "pi-demo"
 spec:
   selector:
     matchLabels:
-      app: "elastic-client"
+      app: "pi-demo"
   template:
     metadata:
       labels:
-        app: "elastic-client"
+        app: "pi-demo"
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/id: "pi-demo"
     spec:
       nodeSelector:
-        type: 'compute'
+        type: 'pi'
       containers:
-        - name: "elastic-client"
-          image: "iiglesias/home-lab:elastic-client-0.1"
+        - name: "pi-demo"
+          image: "iiglesias/home-lab:pi-demo-0.1"
           env:
-            - name: JAVA_OPTS
-              value: '-Xshareclasses -Xquickstart -XX:+UseContainerSupport -XX:+RuntimeInstrumentation'
+           # - name: JAVA_OPTS
+           #   value: '-Xshareclasses -Xquickstart -XX:+UseContainerSupport -XX:+RuntimeInstrumentation'
            # - name: SPRING_PROFILES_ACTIVE
            #   value: 'dev'
-            - name: LOGSTASH_SOCKET
-              value: 'logstash-helm:9800'
+           # - name: LOGSTASH_SOCKET
+           #   value: 'logstash-helm:9800'
             - name: SERVER_PORT
               value: '8080'
            # - name: ENCRYPT_KEY
@@ -55,6 +58,8 @@ spec:
                   name: rabbit-credentials
             - name: RABBIT_HOST
               value: 'amqp://rabbit-rabbitmq-headless:5672'
+            - name: DAPR_HTTP_PORT
+              value: 'http://guest:guest@localhost:3500/v1.0/bindings/measure-dapr'
             #- name: SPRING_JPA_DATABASEPLATFORM
             #  value: 'org.hibernate.dialect.PostgreSQL95Dialect'
             #- name: SPRING_MAIN_LAZYINITIALIZATION
@@ -64,12 +69,12 @@ spec:
           ports:
             - name: http
               containerPort: 8080
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 5
-            timeoutSeconds: 5
+         # readinessProbe:
+         #   httpGet:
+         #     path: /health
+         #     port: 8080
+         #   initialDelaySeconds: 5
+         #   timeoutSeconds: 5
           #livenessProbe:
           #  httpGet:
           #    path: /banking/online-collect/v1/health
