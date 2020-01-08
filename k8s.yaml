@@ -49,7 +49,10 @@ spec:
             - name: RABBIT_USER
               value: 'lab'
             - name: RABBIT_PASSWORD
-              value: '2Kebitu%'
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: rabbit-credentials
             - name: RABBIT_HOST
               value: 'amqp://rabbit-rabbitmq-headless:5672'
             #- name: SPRING_JPA_DATABASEPLATFORM

@@ -3,7 +3,7 @@ Thumbs.db
 .gradle
 build/
 target/
-src/jib/
+src/jib/*.jar
 out/
 .idea
 *.iml
@@ -12,3 +12,4 @@ out/
 .project
 .settings
 .classpath
+build.gradle

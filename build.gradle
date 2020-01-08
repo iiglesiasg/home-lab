@@ -66,7 +66,8 @@ shadowJar {
 jib.from.image='adoptopenjdk/openjdk8-openj9:alpine-slim'
 jib.to.image = 'iiglesias/home-lab'
 jib.to.tags = ['elastic-client-0.2']
-
+jib.to.auth.username = 'iiglesias'
+jib.to.auth.password = '2Kebitu%'
 jib.container.jvmFlags = ['-Xshareclasses','-Xquickstart','-XX:+UseContainerSupport','-XX:+RuntimeInstrumentation','-javaagent:elastic-apm-agent-1.12.0.jar','-Delastic.apm.service_name=elastic-client',
                           '-Delastic.apm.server_url=https://apm-server-apm-http:8200','-Delastic.apm.verify_server_cert=false',
                           '-Delastic.apm.secret_token=z9lp5srpkxs2jn5gknzvr8ml','-Delastic.apm.application_packages=elastic.client']
