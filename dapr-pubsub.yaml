@@ -1,0 +1,11 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: messagebus
+spec:
+  type: pubsub.rabbitmq
+  metadata:
+  - name: host
+    value: "amqp://guest:guest@10.43.208.32:5672" # Required. Example: "rabbitmq.default.svc.cluster.local:5672"
+  - name: consumerID
+    value: "61415901178272324029" # Required. Any unique ID. Example: "myConsumerID"
