@@ -26,6 +26,6 @@ while True:
         sleep(1)
     except Exception as e:
         print(e)
-        logging.error(response.text)
+        logging.error(e)
     red.off()
     sleep(10)
