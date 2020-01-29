@@ -15,6 +15,9 @@ from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 from gpiozero import LED,CPUTemperature
 from time import sleep
+from elasticapm.contrib.flask import ElasticAPM
+from elasticapm import Client
+
 import requests
 import logging
 import os
@@ -23,6 +26,8 @@ import os
 def main():
 
     red = LED(26)
+    apm = ElasticAPM("home-lab", service_name='led-demo', secret_token='z9lp5srpkxs2jn5gknzvr8ml', logging=True)
+    client = Client({'SERVICE_NAME': 'example'}, **defaults)
     dapr_port = os.getenv("DAPR_HTTP_PORT", 3500)
     dapr_url = "http://localhost:{}/v1.0/bindings/measure-dapr".format(dapr_port)
     cpu = CPUTemperature(min_temp=50, max_temp=90)
@@ -34,6 +39,7 @@ def main():
                             "magnitude": "Cº",
                             "value": cpu.temperature}}
         try:
+            client.begin_transaction("cputemp")
             response = requests.post(dapr_url, json=payload)
             print(response.text, flush=True)
             red.on()
