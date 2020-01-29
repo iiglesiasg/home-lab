@@ -1,0 +1,34 @@
+"""
+    Manage constant values
+"""
+
+ENV_DEV="DEV"
+ENV_CER="CER"
+
+PLATFORM_OPENSHIFT = "openshift"
+PLATFORM_AZURE = "azure"
+
+AZURE_DEV_URL_ACS_MS = "https://10.79.6.13/"
+AZURE_CER_URL_ACS_MS = "https://10.79.15.73/"
+
+AZURE_DEV_URL_MS = "https://azingressdesa.credito.bcp.com.pe"
+AZURE_CER_URL_MS = "https://azingresscert.credito.bcp.com.pe"
+
+OC_DEV = "OC_DEV"
+PMBRK_DEV = "PMBRK_DEV"
+OC_CER_CHO = "OC_CER_CHO"
+OC_CER_MOL = "OC_CER_MOL"
+
+AZ_ACS_DEV = "AZ_ACS_DEV"
+AZ_ACS_CER = "AZ_ACS_CER"
+
+AZ_ATLA_DEV = "AZ_ATLA_DEV"
+AZ_ATLA_CER = "AZ_ATLA_CER"
+
+AZ_LEGO_DEV = "AZ_LEGO_DEV"
+AZ_TRHI_DEV = "AZ_TRHI_DEV"
+AZ_EVA0_DEV = "AZ_EVA0_DEV"
+AZ_PPEL_DEV = "AZ_PPEL_DEV"
+AZ_NTLC_DEV = "AZ_NTLC_DEV"
+AZ_WISE_DEV = "AZ_WISE_DEV"
+AZ_FNEL_DEV = "AZ_FNEL_DEV"
