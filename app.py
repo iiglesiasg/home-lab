@@ -13,6 +13,7 @@ from tornado.gen import multi
 from tornado.httpclient import HTTPClientError
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
+from flask import Flask
 from gpiozero import LED,CPUTemperature
 from time import sleep
 from elasticapm.contrib.flask import ElasticAPM
@@ -22,12 +23,14 @@ import requests
 import logging
 import os
 
+app = Flask(__name__)
+
 
 def main():
 
     red = LED(26)
 
-    apm = ElasticAPM(main, service_name='led-demo', secret_token='z9lp5srpkxs2jn5gknzvr8ml', logging=True)
+    apm = ElasticAPM(app, service_name='led-demo', secret_token='z9lp5srpkxs2jn5gknzvr8ml', logging=True)
     client = Client({'SERVICE_NAME': 'example'}, **defaults)
     dapr_port = os.getenv("DAPR_HTTP_PORT", 3500)
     dapr_url = "http://localhost:{}/v1.0/bindings/measure-dapr".format(dapr_port)
