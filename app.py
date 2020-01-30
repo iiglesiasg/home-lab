@@ -33,7 +33,7 @@ dapr_url = "http://localhost:{}/v1.0/bindings/measure-dapr".format(dapr_port)
 
 client = Client({'SERVICE_NAME': 'pi-demo'})
 
-@client.begin_transaction("cputemp")
+@client.begin_transaction(transaction_type="cputemp")
 async def dapr(temp: float):
     payload = {"data": {"device": "pi",
                         "signalType": "Temp",
