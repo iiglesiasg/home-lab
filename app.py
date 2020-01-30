@@ -34,7 +34,7 @@ dapr_url = "http://localhost:{}/v1.0/bindings/measure-dapr".format(dapr_port)
 
 client = Client({'SERVICE_NAME': 'pi-demo'})
 
-@elasticapm.begin_transaction(transaction_type="cputemp")
+@elasticapm.capture_span()
 async def dapr(temp: float):
     payload = {"data": {"device": "pi",
                         "signalType": "Temp",
@@ -59,7 +59,7 @@ def main():
         #                    "magnitude": "Cº",
         #                    "value": cpu.temperature}}
         try:
-            #client.begin_transaction("cputemp")
+            client.begin_transaction("cputemp")
             response = dapr(cpu.temperature)
             print(response.text, flush=True)
             red.on()
@@ -69,6 +69,7 @@ def main():
             logging.error(e)
         red.off()
         sleep(10)
+        client.end_transaction("cputemp")
 
 if __name__ == "__main__":
     main()
