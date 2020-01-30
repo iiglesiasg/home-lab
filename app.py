@@ -16,6 +16,7 @@ import json
 from flask import Flask
 from gpiozero import LED,CPUTemperature
 from time import sleep
+import elasticapm
 from elasticapm.contrib.flask import ElasticAPM
 from elasticapm import Client
 from elasticapm.contrib.opentracing import Tracer
@@ -33,7 +34,7 @@ dapr_url = "http://localhost:{}/v1.0/bindings/measure-dapr".format(dapr_port)
 
 client = Client({'SERVICE_NAME': 'pi-demo'})
 
-@client.begin_transaction(transaction_type="cputemp")
+@elasticapm.begin_transaction(transaction_type="cputemp")
 async def dapr(temp: float):
     payload = {"data": {"device": "pi",
                         "signalType": "Temp",
