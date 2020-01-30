@@ -18,33 +18,46 @@ from gpiozero import LED,CPUTemperature
 from time import sleep
 from elasticapm.contrib.flask import ElasticAPM
 from elasticapm import Client
+from elasticapm.contrib.opentracing import Tracer
+
 
 import requests
 import logging
 import os
 
 app = Flask(__name__)
+tracer = Tracer()
 
+dapr_port = os.getenv("DAPR_HTTP_PORT", 3500)
+dapr_url = "http://localhost:{}/v1.0/bindings/measure-dapr".format(dapr_port)
+
+@app.dapr
+async def dapr(temp: float):
+    payload = {"data": {"device": "pi",
+                        "signalType": "Temp",
+                        "magnitude": "Cº",
+                        "value": temp}}
+    return requests.post(dapr_url, json=payload)
 
 def main():
 
     red = LED(26)
 
-    apm = ElasticAPM(app, service_name='led-demo', secret_token='z9lp5srpkxs2jn5gknzvr8ml', logging=True)
-    client = Client({'SERVICE_NAME': 'led-demo', 'SERVER_URL': 'https://apm-server-apm-http:8200'})
-    dapr_port = os.getenv("DAPR_HTTP_PORT", 3500)
-    dapr_url = "http://localhost:{}/v1.0/bindings/measure-dapr".format(dapr_port)
+    apm = ElasticAPM(app)
+    client = Client({'SERVICE_NAME': 'pi-demo'})
+    #dapr_port = os.getenv("DAPR_HTTP_PORT", 3500)
+    #dapr_url = "http://localhost:{}/v1.0/bindings/measure-dapr".format(dapr_port)
     cpu = CPUTemperature(min_temp=50, max_temp=90)
     logging.info('Initial temperature: {}C'.format(cpu.temperature))
 
     while True:
-        payload = {"data": {"device": "pi",
-                            "signalType": "Temp",
-                            "magnitude": "Cº",
-                            "value": cpu.temperature}}
+        #payload = {"data": {"device": "pi",
+        #                    "signalType": "Temp",
+        #                    "magnitude": "Cº",
+        #                    "value": cpu.temperature}}
         try:
             client.begin_transaction("cputemp")
-            response = requests.post(dapr_url, json=payload)
+            response = dapr(cpu.temperature)
             print(response.text, flush=True)
             red.on()
             sleep(1)
